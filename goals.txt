@@ -1,0 +1,5 @@
+test1.csv 11389 ASC 1 1 0 0 1 0 1 0 1 0
+test2.csv 24498 DESC 1 0 0 1 0 1 1 0 1 1
+test3.csv 30327 ASC 1 0 1 1 1 0 0 0 1 0
+test4.csv 7701 DESC 0 0 1 0 1 0 0 0 0 0
+test5.csv 17750 DESC 0 0 0 1 1 1 0 1 0 1
