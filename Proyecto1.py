@@ -1,6 +1,7 @@
 import time
 import operator
 import sys
+import glob
 
 
 def heapify(arr, n, i):
@@ -47,7 +48,7 @@ def bubbleSort(arr):
 startTime = time.time()
 CSV_DIRECTORY = "data/"
 goals_hash = {}
-if len(sys.argv) <2:
+if len(sys.argv) >2:
     goals_file = open("goals.txt", "r")
     goal_line = goals_file.readline()
     while goal_line != "":
@@ -86,6 +87,10 @@ if len(sys.argv) <2:
     goals_file.close()
 else:
     if sys.argv[1] == "-p":
+        allFiles = [i.replace('data\\','') for i in glob.glob("data\*.csv")]
+        print (allFiles)
+
+        allCases = {}
         #PRE PROCESSING
         #ASKING GOALS FILES
         #SAVING IN GOALS HASH
