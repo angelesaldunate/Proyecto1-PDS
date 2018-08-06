@@ -34,6 +34,14 @@ def bubble_sort(arr):
                 arr[j+1] = tempo
     return arr
 
+def bubbleSort(arr):
+    for i in range(len(arr)-1,0,-1):
+        for k in range(i):
+            if arr[k][1]>arr[k+1][1]:
+                aux = arr[k]
+                arr[k] = arr[k+1]
+                arr[k+1] = aux
+
 
 startTime = time.time()
 CSV_DIRECTORY = "data/"
@@ -48,6 +56,7 @@ while goal_line != "":
     ponderator_vector = [int(i) for i in splitted_line]
     tuples = []
     csv_file = open(CSV_DIRECTORY + required_file_name, 'r')
+    first_line = csv_file.readline()
     for csv_line in csv_file:
         attrs = csv_line.strip().split(';')
         identifier = attrs.pop(0)
@@ -56,20 +65,24 @@ while goal_line != "":
             if ponderator == 1:
                 ponderation += float(attr)
         tuples.append((identifier, ponderation))
+    csv_file.close()
     goal_line = goals_file.readline()
     # COMPUTE THE RESULT
     result = ""
-    # tuples.sort(key=operator.itemgetter(1))
-    bubble_sort(tuples)
-    # sorted(tuples, key=lambda x: x[1])
-    # heap_sort(tuples)
+    tuples.sort(key=operator.itemgetter(1))
+    #bubbleSort(tuples)
+    #sorted(tuples, key=lambda x: x[1])
+    #heap_sort(tuples)
+    #print tuples
+
     if required_order == 'ASC':
-        result = tuples[required_position]
+        result = tuples[required_position-1]
     else:
         result = tuples[len(tuples) - required_position]
 
     goals_hash[goal_line] = result
-print goals_hash
+goals_file.close()
+#print goals_hash
 resultFile = open("results1.txt", 'w')
 for result in goals_hash.values():
     resultFile.write(result[0] + ": " + str(result[1]) + "\n")
