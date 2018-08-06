@@ -87,10 +87,19 @@ if len(sys.argv) >2:
     goals_file.close()
 else:
     if sys.argv[1] == "-p":
-        allFiles = [i.replace('data\\','') for i in glob.glob("data\*.csv")]
-        print (allFiles)
+        allFiles = glob.glob("data\*.csv")
+        filesCases = {}
+        for file in allFiles:
+            allCases = {}
+            allFileInfo = open(file,'r')
+            first_line_len = len(allFileInfo.readline().strip().split(';'))-1
+            get_bin = lambda x, n: format(x, 'b').zfill(n)
+            for i in range(2**first_line_len):
+                allCases[get_bin(i,first_line_len)] =[]
 
-        allCases = {}
+            filesCases[file.replace('data\\','')]=allCases
+        print (filesCases)
+
         #PRE PROCESSING
         #ASKING GOALS FILES
         #SAVING IN GOALS HASH
