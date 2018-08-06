@@ -3,3 +3,8 @@ test1.csv 24498 DESC 1 0 0 1 0 1 1 0 1 1
 test3.csv 30327 ASC 1 0 1 1 1 0 0 0 1 0
 test4.csv 7701 DESC 0 0 1 0 1 0 0 0 0 0
 test5.csv 17750 DESC 0 0 0 1 1 1 0 1 0 1
+test2.csv 11953 ASC 0 0 1 1 1 0 1 1 1 0
+test4.csv 6530 ASC 1 0 0 0 0 0 0 0 1 0
+test5.csv 34 DESC 0 1 1 0 1 0 0 0 1 0
+test1.csv 986 DESC 1 0 0 1 0 1 0 1 1 0
+test3.csv 5736 ASC 1 1 0 1 1 1 0 0 0 0
