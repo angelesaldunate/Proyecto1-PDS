@@ -87,6 +87,7 @@ if len(sys.argv) <2:
 else:
     if sys.argv[1] == "-p":
         #PRE PROCESSING
+        #ASKING GOALS FILES
         #SAVING IN GOALS HASH
         print()
     else:
