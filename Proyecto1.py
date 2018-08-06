@@ -89,16 +89,28 @@ else:
     if sys.argv[1] == "-p":
         allFiles = glob.glob("data\*.csv")
         filesCases = {}
-        for file in allFiles:
-            allCases = {}
-            allFileInfo = open(file,'r')
-            first_line_len = len(allFileInfo.readline().strip().split(';'))-1
-            get_bin = lambda x, n: format(x, 'b').zfill(n)
-            for i in range(2**first_line_len):
-                allCases[get_bin(i,first_line_len)] =[]
+        for file in allFiles: # para cada archivo de data
+            allCases = {} # donde guardo los casos
+            csv_file = open(file,'r')
+            first_line_len = len(csv_file.readline().strip().split(';'))-1 # veo el largo de las columnas
+            get_bin = lambda x, n: format(x, 'b').zfill(n)#genera el binario como ponderador
+            all_csv_file = list(csv_file.readlines())# guardo el archivo en una lista
+            for i in range(2**first_line_len): # genero 2 elevado a las columnas
+                tuples =[]
+                bin_in_list = list(int(i) for i in str(get_bin(i,first_line_len))) # el binario lo transformo a una lista de ints
+                for csv_line in all_csv_file:
+                    attrs = csv_line.strip().split(';')
+                    identifier = attrs.pop(0)
+                    ponderation = 0
+                    for (attr, ponderator) in zip(attrs, bin_in_list):
+                        if ponderator == 1:
+                            ponderation += float(attr)
+                    tuples.append((identifier, ponderation))
+                tuples.sort(key=operator.itemgetter(1))
+                allCases[get_bin(i, first_line_len)]=tuples # guardo la lista generada con el key del binario
 
-            filesCases[file.replace('data\\','')]=allCases
-        print (filesCases)
+            filesCases[file.replace('data\\','')]=allCases # dejo como key el nombre del archivo
+        #print (filesCases[list(filesCases.keys())[-1]])
 
         #PRE PROCESSING
         #ASKING GOALS FILES
