@@ -1,5 +1,6 @@
 import time
 import operator
+import sys
 
 
 def heapify(arr, n, i):
@@ -45,43 +46,52 @@ def bubbleSort(arr):
 
 startTime = time.time()
 CSV_DIRECTORY = "data/"
-goals_file = open("goals.txt", "r")
-goal_line = goals_file.readline()
 goals_hash = {}
-while goal_line != "":
-    splitted_line = goal_line.strip().split(' ')
-    required_file_name = splitted_line.pop(0)
-    required_position = int(splitted_line.pop(0))
-    required_order = splitted_line.pop(0)
-    ponderator_vector = [int(i) for i in splitted_line]
-    tuples = []
-    csv_file = open(CSV_DIRECTORY + required_file_name, 'r')
-    first_line = csv_file.readline()
-    for csv_line in csv_file:
-        attrs = csv_line.strip().split(';')
-        identifier = attrs.pop(0)
-        ponderation = 0
-        for (attr, ponderator) in zip(attrs, ponderator_vector):
-            if ponderator == 1:
-                ponderation += float(attr)
-        tuples.append((identifier, ponderation))
-    csv_file.close()
+if len(sys.argv) <2:
+    goals_file = open("goals.txt", "r")
     goal_line = goals_file.readline()
-    # COMPUTE THE RESULT
-    result = ""
-    tuples.sort(key=operator.itemgetter(1))
-    #bubbleSort(tuples)
-    #sorted(tuples, key=lambda x: x[1])
-    #heap_sort(tuples)
-    #print tuples
+    while goal_line != "":
+        splitted_line = goal_line.strip().split(' ')
+        required_file_name = splitted_line.pop(0)
+        required_position = int(splitted_line.pop(0))
+        required_order = splitted_line.pop(0)
+        ponderator_vector = [int(i) for i in splitted_line]
+        tuples = []
+        csv_file = open(CSV_DIRECTORY + required_file_name, 'r')
+        first_line = csv_file.readline()
+        for csv_line in csv_file:
+            attrs = csv_line.strip().split(';')
+            identifier = attrs.pop(0)
+            ponderation = 0
+            for (attr, ponderator) in zip(attrs, ponderator_vector):
+                if ponderator == 1:
+                    ponderation += float(attr)
+            tuples.append((identifier, ponderation))
+        csv_file.close()
+        goal_line = goals_file.readline()
+        # COMPUTE THE RESULT
+        result = ""
+        tuples.sort(key=operator.itemgetter(1))
+        #bubbleSort(tuples)
+        #sorted(tuples, key=lambda x: x[1])
+        #heap_sort(tuples)
+        #print tuples
 
-    if required_order == 'ASC':
-        result = tuples[required_position-1]
+        if required_order == 'ASC':
+            result = tuples[required_position-1]
+        else:
+            result = tuples[len(tuples) - required_position]
+
+        goals_hash[goal_line] = result
+    goals_file.close()
+else:
+    if sys.argv[1] == "-p":
+        #PRE PROCESSING
+        #SAVING IN GOALS HASH
+        print()
     else:
-        result = tuples[len(tuples) - required_position]
+        print ("Error de comando")
 
-    goals_hash[goal_line] = result
-goals_file.close()
 #print goals_hash
 resultFile = open("results1.txt", 'w')
 for result in goals_hash.values():
