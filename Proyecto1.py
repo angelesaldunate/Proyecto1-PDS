@@ -90,6 +90,7 @@ else:
     if sys.argv[1] == "-p":
         allFiles = glob.glob("data\*.csv")
         filesCases = {}
+        fileIdes = {}
         for file in allFiles: # para cada archivo de data
             allCases = {} # donde guardo los casos
             csv_file = open(file,'r')
@@ -97,20 +98,21 @@ else:
             get_bin = lambda x, n: format(x, 'b').zfill(n)#genera el binario como ponderador
             all_csv_file = list(csv_file.readlines())# guardo el archivo en una lista
 
-
-            for i in range(first_line_len): # genero 2 elevado a las columnas
+            for i in range(first_line_len):
+                    ides_file = []
                     numbers =[]
-                    ides = []
                     for csv_line in all_csv_file:
                         attrs = csv_line.strip().split(';')
                         identifier = attrs.pop(0)
                         numbers.append( float(attrs[i]))
-                        ides.append(identifier)
-                    allCases[i]=[identifier,array(numbers)] # guardo la lista generada con el key del binario
+                        ides_file.append(identifier)
+                    allCases[i]=array(numbers) # guardo la lista generada con el key del binario
 
             filesCases[file.replace('data\\','')]=allCases # dejo como key el nombre del archivo
-
-        goals = input('Ingrese archivo')
+            fileIdes[file.replace('data\\', '')] = ides_file
+        print ('The pre procesin script took {0} second !'.format(time.time() - startTime))
+        goals = input('Ingrese archivo: ')
+        startTime = time.time()
         goals_file = open(goals,'r')
         for goal_line in goals_file:
             goal_no = goal_line
@@ -124,12 +126,12 @@ else:
             required_file_name = goal_line.pop(0)
             required_position = int(goal_line.pop(0))
             required_order = goal_line.pop(0)
-            final_array = zeros(len(filesCases[required_file_name][0][1]))
+            final_array = zeros(len(fileIdes[required_file_name]))
             for number in list_of_ones:
-                final_array+=filesCases[required_file_name][number][1]
+                final_array+=filesCases[required_file_name][number]
             tuples = []
-            for ide in range(len(filesCases[required_file_name][0][1])):
-                tuples.append((filesCases[required_file_name][0][0],final_array[ide]))
+            for ide in range(len(fileIdes[required_file_name])):
+                tuples.append((fileIdes[required_file_name][ide],final_array[ide]))
             result = ""
             tuples.sort(key=operator.itemgetter(1))
             # bubbleSort(tuples)
@@ -156,7 +158,7 @@ else:
 #print goals_hash
 resultFile = open("results1.txt", 'w')
 for result in goals_hash.values():
-    resultFile.write(result[0] + ": " + str(result[1]) + "\n")
+    resultFile.write(result[0] +"\n")
 resultFile.close()
 
 print ('The script took {0} second !'.format(time.time() - startTime))
