@@ -97,7 +97,6 @@ else:
             first_line_len = len(csv_file.readline().strip().split(';'))-1 # veo el largo de las columnas
             get_bin = lambda x, n: format(x, 'b').zfill(n)#genera el binario como ponderador
             all_csv_file = list(csv_file.readlines())# guardo el archivo en una lista
-
             for i in range(first_line_len):
                     ides_file = []
                     numbers =[]
@@ -107,7 +106,9 @@ else:
                         numbers.append( float(attrs[i]))
                         ides_file.append(identifier)
                     allCases[i]=array(numbers) # guardo la lista generada con el key del binario
+            # GUARDAR EN ALLCASES LAS COMBINACIONES
 
+            #TODO: hacer las combinaciones y sumar
             filesCases[file.replace('data\\','')]=allCases # dejo como key el nombre del archivo
             fileIdes[file.replace('data\\', '')] = ides_file
         print ('The pre procesin script took {0} second !'.format(time.time() - startTime))
@@ -117,9 +118,9 @@ else:
         for goal_line in goals_file:
             goal_no = goal_line
             goal_line = goal_line.strip().split()
-            list_of_ones = []
+            list_of_ones = [] # LISTAS DE APARICION DE UNOS
             contador = 0
-            for k in goal_line[3:]:
+            for k in goal_line[3:]: # CONTAR DONDE HAY UNOS
                 if goal_line[3:][contador]=='1':
                     list_of_ones.append(contador)
                 contador+=1
