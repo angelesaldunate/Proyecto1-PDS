@@ -68,11 +68,14 @@ class File:
 
     def set_key_in_sorted_by_ponderator_vector(self,key,value):
         self.sorted_by_ponderator_vector[key]=value
+    def get_rows(self):
+        return self.rows_list
 
 def get_rows_from_csv(csv_file_name):
     csv_file = open(CSV_DIRECTORY+"/"+csv_file_name, 'r')
     attrs_count = len(csv_file.readline().strip().split(';')) - 1  # veo el largo de las columnas
     file_rows = []
+    csv_file.readline() #remove first line
     all_csv_file = list(csv_file.readlines())  # guardo el archivo en una lista
     for csv_line in all_csv_file:
         attrs = csv_line.strip().split(';')
@@ -122,7 +125,6 @@ if preprocess_mode:
         file_objects_by_file_name[file_name]=file_object
     goals_path=raw_input("ingrese nombre del archivo goals")
 
-
 goals_file=open(goals_path,'r')
 goal_line = goals_file.readline()
 while goal_line != "":
@@ -132,13 +134,14 @@ while goal_line != "":
     required_order = splitted_line.pop(0)
     ponderator_vector = [int(i) for i in splitted_line]
     tuples = []
-
     if (required_file_name not in file_objects_by_file_name):
         attrs_count,rows=get_rows_from_csv(required_file_name)
         file_objects_by_file_name[required_file_name]=File(required_file_name,rows)
     file_object=file_objects_by_file_name[required_file_name]
-    if tuple(ponderator_vector) not in file_object.get_sorted_by_ponderator_vector:
-        sorted_rows=sorted(file_rows,key=lambda x:x.get_ponderation(ponderator_vector))
+
+
+    if tuple(ponderator_vector) not in file_object.get_sorted_by_ponderator_vector():
+        sorted_rows=sorted(file_object.get_rows(),key=lambda x:x.get_ponderation(ponderator_vector))
         file_object.set_key_in_sorted_by_ponderator_vector(tuple(ponderator_vector),sorted_rows)
 
     # COMPUTE THE RESULT
@@ -147,10 +150,12 @@ while goal_line != "":
     # heap_sort(tuples)
     # print tuples
     if(required_order=='DESC'):
-        required_position = len(file_object.get_sorted_by_ponderator_vector[tuple(ponderator_vector)]) - required_position
+        required_position = len(file_object.get_sorted_by_ponderator_vector()[tuple(ponderator_vector)]) - required_position
 
-    result = file_object.get_sorted_by_ponderator_vector[tuple(ponderator_vector)][required_position].get_identifier
+    result = file_object.get_sorted_by_ponderator_vector()[tuple(ponderator_vector)][required_position].get_identifier()
 
+
+    print (goal_line)
     goal_line = goals_file.readline()
 
 goals_file.close()
