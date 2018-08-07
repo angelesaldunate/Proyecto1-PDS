@@ -49,7 +49,7 @@ def bubbleSort(arr):
 startTime = time.time()
 CSV_DIRECTORY = "data/"
 goals_hash = {}
-if len(sys.argv) >2:
+if len(sys.argv) <2:
     goals_file = open("goals.txt", "r")
     goal_line = goals_file.readline()
     while goal_line != "":
