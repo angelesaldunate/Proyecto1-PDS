@@ -80,6 +80,7 @@ def get_rows_from_csv(csv_file_name):
     file_rows = []
     csv_file.readline() #remove first line
     all_csv_file = list(csv_file.readlines())  # guardo el archivo en una lista
+    line_count=1
     for csv_line in all_csv_file:
         attrs = csv_line.strip().split(';')
         identifier = attrs.pop(0)
@@ -99,6 +100,8 @@ def get_rows_from_csv(csv_file_name):
             row_ponderations.update(row_pond_extension)
         row = Row(identifier, attrs)
         file_rows.append(row)
+        line_count+=1
+        print line_count
     csv_file.close()
     return attrs_count,file_rows
 
