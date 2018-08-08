@@ -121,7 +121,7 @@ else:
     else:
         print ("Error de comando")
 
-#print goals_hash
+#print goals_has
 resultFile = open("results1.txt", 'w')
 for result in goals_hash.values():
     resultFile.write(result[0] +"\n")
