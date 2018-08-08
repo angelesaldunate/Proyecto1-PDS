@@ -54,11 +54,13 @@ class Row:
         return numpy.dot(ponderator_vector,self.attrs)
     def get_identifier(self):
         return self.identifier
+
 class File:
     def __init__(self,file_name,rows_list):
         self.file_name=file_name
         self.rows_list=rows_list
         self.sorted_by_ponderator_vector={}
+
 
     def set_sorted_by_ponderator_vector(self,sorted_by_ponderator_vector):
         self.sorted_by_ponderator_vector=sorted_by_ponderator_vector
@@ -71,25 +73,42 @@ class File:
     def get_rows(self):
         return self.rows_list
 
+
 def get_rows_from_csv(csv_file_name):
     csv_file = open(CSV_DIRECTORY+"/"+csv_file_name, 'r')
     attrs_count = len(csv_file.readline().strip().split(';')) - 1  # veo el largo de las columnas
     file_rows = []
     csv_file.readline() #remove first line
     all_csv_file = list(csv_file.readlines())  # guardo el archivo en una lista
+    line_count=1
     for csv_line in all_csv_file:
         attrs = csv_line.strip().split(';')
         identifier = attrs.pop(0)
         attrs = [float(attr) for attr in attrs]
+        base_ponderator = "0" * attrs_count
+
+        row_ponderations={base_ponderator:0}
+        for i in range(0,attrs_count-1):
+            row_pond_extension={}
+            for ponderator in row_ponderations:
+                new_ponderator_vector=list(ponderator)
+                new_ponderator_vector[i]='1'
+                new_ponderator=''.join(new_ponderator_vector)
+                new_ponderation=attrs[i]+row_ponderations[ponderator]
+                row_pond_extension[new_ponderator]=new_ponderation
+
+            row_ponderations.update(row_pond_extension)
         row = Row(identifier, attrs)
         file_rows.append(row)
+        line_count+=1
+        print line_count
     csv_file.close()
     return attrs_count,file_rows
 
 startTime = time.time()
 
 preprocess_mode=True
-CSV_DIRECTORY = "data\\"
+CSV_DIRECTORY = "data/"
 goals_hash = {}
 
 total_time_seconds=3*60
