@@ -1,14 +1,18 @@
+
 import time
 import operator
 import sys
 import glob
-import itertools
 from numpy import *
+import itertools
+import datetime
 
+
+print (datetime.datetime.now().time())
 startTime = time.time()
 CSV_DIRECTORY = "data/"
 goals_hash = {}
-if len(sys.argv) <2:
+if len(sys.argv) < 2:
     goals_file = open("goals.txt", "r")
     goal_line = goals_file.readline()
     while goal_line != "":
@@ -33,8 +37,6 @@ if len(sys.argv) <2:
         # COMPUTE THE RESULT
         result = ""
         tuples.sort(key=operator.itemgetter(1))
-        #print tuples
-
         if required_order == 'ASC':
             result = tuples[required_position-1]
         else:
@@ -43,6 +45,9 @@ if len(sys.argv) <2:
         goals_hash[goal_line] = result
     goals_file.close()
 else:
+    # PRE PROCESSING
+    # ASKING GOALS FILES
+    # SAVING IN GOALS HASH
     if sys.argv[1] == "-p":
         allFiles = glob.glob("data\*.csv")
         filesCases = {}
@@ -59,9 +64,9 @@ else:
                     for csv_line in all_csv_file:
                         attrs = csv_line.strip().split(';')
                         identifier = attrs.pop(0)
-                        numbers.append(float(attrs[i]))
+                        numbers.append( float(attrs[i]))
                         ides_file.append(identifier)
-                    allCases[i]=array(numbers) # guardo la lista generada con el key del binario
+                    allCases[i]=array(numbers) # guardo la lista generada con el key el indice de la columna
             # GUARDAR EN ALLCASES LAS COMBINACIONES
             size = len(allCases)
             a = list(allCases.keys())
@@ -70,17 +75,19 @@ else:
                 for sub in combs:
                     vals = [allCases[x] for x in sub]
                     allCases[sub] = [sum(x) for x in zip(*vals)]
-            #TODO: hacer las combinaciones y sumar
-            filesCases[file.replace('data\\', '')] = allCases # dejo como key el nombre del archivo
+
+            filesCases[file.replace('data\\','')]=allCases # dejo como key el nombre del archivo
             fileIdes[file.replace('data\\', '')] = ides_file
         print ('The pre procesin script took {0} second !'.format(time.time() - startTime))
+        print (datetime.datetime.now().time())
         goals = input('Ingrese archivo: ')
+        print (datetime.datetime.now().time())
         startTime = time.time()
         goals_file = open(goals,'r')
         for goal_line in goals_file:
             goal_no = goal_line
             goal_line = goal_line.strip().split()
-            list_of_ones = [] # LISTAS DE APARICION DE UNOS
+            list_of_ones = []
             contador = 0
             for k in goal_line[3:]: # CONTAR DONDE HAY UNOS
                 if goal_line[3:][contador]=='1':
@@ -89,18 +96,18 @@ else:
             required_file_name = goal_line.pop(0)
             required_position = int(goal_line.pop(0))
             required_order = goal_line.pop(0)
-            final_array = zeros(len(fileIdes[required_file_name]))
-            for number in list_of_ones:
-                final_array+=filesCases[required_file_name][number]
+            if len(list_of_ones)>1:
+                final_array = filesCases[required_file_name][tuple(list_of_ones)]
+            elif len(list_of_ones)==1:
+                final_array = filesCases[required_file_name][list_of_ones[0]]
+            else:
+                final_array = zeros(len(fileIdes[required_file_name]))
+
             tuples = []
             for ide in range(len(fileIdes[required_file_name])):
                 tuples.append((fileIdes[required_file_name][ide],final_array[ide]))
             result = ""
             tuples.sort(key=operator.itemgetter(1))
-            # bubbleSort(tuples)
-            # sorted(tuples, key=lambda x: x[1])
-            # heap_sort(tuples)
-            # print tuples
 
             if required_order == 'ASC':
                 result = tuples[required_position - 1]
@@ -108,13 +115,6 @@ else:
                 result = tuples[len(tuples) - required_position]
 
             goals_hash[goal_no] = result
-
-
-
-        #PRE PROCESSING
-        #ASKING GOALS FILES
-        #SAVING IN GOALS HASH
-        print()
     else:
         print ("Error de comando")
 
@@ -125,3 +125,6 @@ for result in goals_hash.values():
 resultFile.close()
 
 print ('The script took {0} second !'.format(time.time() - startTime))
+print (datetime.datetime.now().time())
+
+
