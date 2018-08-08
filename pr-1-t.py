@@ -111,8 +111,8 @@ preprocess_mode=True
 CSV_DIRECTORY = "data/"
 goals_hash = {}
 
-total_time_seconds=10*60
-allFiles = glob.glob("data/*.csv")
+total_time_seconds=3*60
+allFiles = glob.glob("data\*.csv")
 files_count=len(allFiles)
 
 file_objects_by_file_name={}
@@ -122,7 +122,7 @@ if preprocess_mode:
     for file in allFiles:  # para cada archivo de data
         allCases = {}  # donde guardo los casos
         file_start_time=time.time()
-        file_name=file.split("/")[-1]
+        file_name=file.split("\\")[-1]
         csv_file = open(file, 'r')
         attrs_count,file_rows=get_rows_from_csv(file_name)
         file_object=File(file_name,file_rows)
@@ -174,7 +174,6 @@ while goal_line != "":
     result = file_object.get_sorted_by_ponderator_vector()[tuple(ponderator_vector)][required_position].get_identifier()
 
 
-    print (goal_line)
     goal_line = goals_file.readline()
 
 goals_file.close()
